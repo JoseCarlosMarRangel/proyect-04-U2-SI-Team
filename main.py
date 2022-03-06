@@ -15,6 +15,7 @@ import os
 # io.show()
 
 
+# * el dataset se muestra en la terminal como una matriz casi casi
 print(os.listdir('./dataset/'))
 path_image = './dataset/'
 image = io.imread(path_image + 'BlackBishop.jpg')
