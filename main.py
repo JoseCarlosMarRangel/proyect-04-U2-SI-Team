@@ -39,7 +39,7 @@ image_path_list = os.listdir('./dataset/')
 
 #Aplica un filtro en la imagen para que este en blanco y negro
 #image_path = 'rey.jpg';
-image = rgb2gray(io.imread('./dataset/'+'BlackKingThree.jpg'))
+image = rgb2gray(io.imread('./dataset/'+'1.jpg'))
 imageplt = io.imshow(image)
 plt.show()
 
