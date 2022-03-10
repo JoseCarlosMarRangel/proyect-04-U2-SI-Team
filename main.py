@@ -30,16 +30,15 @@ import os
 #image = io.imread(path_image + 'BlackBishop.jpg')
 #imageplt = plt.imshow(image)
 #plt.show()
-
-image_path_list = os.listdir('./dataset/')
 # looking at the first image
-#i = 0
-#image_path = image_path_list[i]
+image_path_list = os.listdir('./piezas/')
+i = 17
+image_path = image_path_list[i]
 #image = rgb2gray(io.imread('./dataset/'+image_path))
 
 #Aplica un filtro en la imagen para que este en blanco y negro
 #image_path = 'rey.jpg';
-image = rgb2gray(io.imread('./dataset/'+'1.jpg'))
+image = rgb2gray(io.imread('./piezas/'+image_path))
 imageplt = io.imshow(image)
 plt.show()
 
@@ -54,6 +53,64 @@ label_img = label(binary)
 io.imshow(label_img)
 plt.show()
 
+table = pd.DataFrame(regionprops_table(label_img, image,
+                                       ['convex_area', 'area',
+                                        'eccentricity', 'extent',                   
+                                        'inertia_tensor',
+                                        'major_axis_length', 
+                                        'minor_axis_length']))
+table['convex_ratio'] = table['area']/table['convex_area']
+table['label'] = image_path[5]
+print("Tabla de los datos de la imagen:")
+print(table)
+
+
+
+print("Todas las imagenes")
+image_path_list = os.listdir('./piezas/')
+#image_path_list = os.listdir("Leaves") Eliminar
+df = pd.DataFrame()
+for i in range(len(image_path_list)):
+	image_path = image_path_list[i]
+	image = rgb2gray(io.imread('./piezas/'+image_path))
+	binary = image < threshold_otsu(image)
+	binary = closing(binary)
+	label_img = label(binary)
+	
+
+	table = pd.DataFrame(regionprops_table(label_img, image
+							['convex_area', 'area', 'eccentricity',
+							'extent', 'inertia_tensor',
+							'major_axis_length', 'minor_axis_length',
+							'perimeter', 'solidity', 'image',
+							'orientation', 'moments_central',
+							'moments_hu', 'euler_number',
+							'equivalent_diameter',
+							'mean_intensity', 'bbox']))
+	table['perimeter_area_ratio'] = table['perimeter']/table['area']
+	real_images = []
+	std = []
+	mean = []
+	percent25 = []
+	percent75 = []
+	for prop in regionprops(label_img): 
+
+		min_row, min_col, max_row, max_col = prop.bbox
+		img = image[min_row:max_row,min_col:max_col]
+		real_images += [img]
+		mean += [np.mean(img)]
+		std += [np.std(img)]
+		percent25 += [np.percentile(img, 25)]
+		percent75 += [np.percentile(img, 75)]
+	table['real_images'] = real_images
+	table['mean_intensity'] = mean
+	table['std_intensity'] = std
+	table['25th Percentile'] = mean
+	table['75th Percentile'] = std
+	table['iqr'] = table['75th Percentile'] - table['25th Percentile']
+	table['label'] = image_path[5]
+	df = pd.concat([df, table], axis=0)
+df.head()
 
 
 exit()
