@@ -19,18 +19,11 @@ from tqdm import tqdm
 import os
 
 
-#img = io.imread('./dataset/BlackBishop(1).jpg')
-# io.imshow(img)
-# io.show()
 
 
-# * el dataset se muestra en la terminal como una matriz casi casi
-#print(os.listdir('./dataset/'))
-#path_image = './dataset/'
-#image = io.imread(path_image + 'BlackBishop.jpg')
-#imageplt = plt.imshow(image)
-#plt.show()
-# looking at the first image
+
+
+# Prueba con una sola imagen
 image_path_list = os.listdir('./piezas/')
 i = 17
 image_path = image_path_list[i]
@@ -53,6 +46,7 @@ label_img = label(binary)
 io.imshow(label_img)
 plt.show()
 
+#Tabla con los datos de la imagen
 table = pd.DataFrame(regionprops_table(label_img, image,
                                        ['convex_area', 'area',
                                         'eccentricity', 'extent',                   
@@ -64,8 +58,10 @@ table['label'] = image_path[5]
 print("Tabla de los datos de la imagen:")
 print(table)
 
+#exit()
 
-
+#Prueba de implementacion de lo previo con todas las imagenes
+#Por algun motivo que no entendemos presenta un index error, a pesar de que con anterioridad no pasaba
 print("Todas las imagenes")
 image_path_list = os.listdir('./piezas/')
 #image_path_list = os.listdir("Leaves") Eliminar
@@ -79,14 +75,15 @@ for i in range(len(image_path_list)):
 	
 
 	table = pd.DataFrame(regionprops_table(label_img, image
-							['convex_area', 'area', 'eccentricity',
-							'extent', 'inertia_tensor',
-							'major_axis_length', 'minor_axis_length',
-							'perimeter', 'solidity', 'image',
-							'orientation', 'moments_central',
-							'moments_hu', 'euler_number',
-							'equivalent_diameter',
-							'mean_intensity', 'bbox']))
+											['convex_area', 'area', 'eccentricity',
+												'extent', 'inertia_tensor',
+												'major_axis_length', 'minor_axis_length',
+												'perimeter', 'solidity', 'image',
+												'orientation', 'moments_central',
+												'moments_hu', 'euler_number',
+												'equivalent_diameter',
+												'mean_intensity', 'bbox'])
+						)
 	table['perimeter_area_ratio'] = table['perimeter']/table['area']
 	real_images = []
 	std = []
