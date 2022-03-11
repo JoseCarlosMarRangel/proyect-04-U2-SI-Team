@@ -64,8 +64,8 @@ print(table)
 #Por algun motivo que no entendemos presenta un index error, a pesar de que con anterioridad no pasaba
 print("Todas las imagenes")
 image_path_list = os.listdir('./piezas/')
-#image_path_list = os.listdir("Leaves") Eliminar
 df = pd.DataFrame()
+
 for i in range(len(image_path_list)):
 	image_path = image_path_list[i]
 	image = rgb2gray(io.imread('./piezas/'+image_path))
@@ -82,8 +82,7 @@ for i in range(len(image_path_list)):
 												'orientation', 'moments_central',
 												'moments_hu', 'euler_number',
 												'equivalent_diameter',
-												'mean_intensity', 'bbox'])
-						)
+												'mean_intensity', 'bbox']))
 	table['perimeter_area_ratio'] = table['perimeter']/table['area']
 	real_images = []
 	std = []
@@ -107,6 +106,7 @@ for i in range(len(image_path_list)):
 	table['iqr'] = table['75th Percentile'] - table['25th Percentile']
 	table['label'] = image_path[5]
 	df = pd.concat([df, table], axis=0)
+
 df.head()
 
 
