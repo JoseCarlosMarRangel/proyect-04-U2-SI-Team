@@ -1,17 +1,14 @@
 from skimage import io
-# from skimage.io import imshow, imread
 from skimage.color import rgb2gray
 from skimage.filters import threshold_otsu
 from skimage.morphology import closing
 from skimage.measure import label, regionprops, regionprops_table
-
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sn
 import pandas as pd
 import pickle
 import csv
-import tensorflow as tf
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report
