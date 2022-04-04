@@ -1,3 +1,4 @@
+
 from skimage import io
 from skimage.color import rgb2gray
 from skimage.filters import threshold_otsu
@@ -15,14 +16,14 @@ import os
 
 
 # Prueba con una sola imagen
-image_path_list = os.listdir('./dataset/')
+image_path_list = os.listdir('./piezas/')
 i = 24
 image_path = 'tBlackTowerFour.jpg'
 # image = rgb2gray(io.imread('./dataset/'+image_path))
 
 # Aplica un filtro en la imagen para que este en blanco y negro
 # image_path = 'rey.jpg';
-image = rgb2gray(io.imread('./dataset/tBlackTowerFour.jpg'))
+image = rgb2gray(io.imread('./piezas/tBlackTowerFour.jpg'))
 ##image = resize(image,(480,640), anti_aliasing = True)
 imageplt = io.imshow(image)
 plt.show()
