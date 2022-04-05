@@ -11,6 +11,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report
 from skimage.transform import resize
 from tqdm import tqdm
+from skimage.morphology import (erosion, dilation, opening, closing,  # noqa
+                                white_tophat)
+from skimage.morphology import black_tophat, skeletonize, convex_hull_image  # noqa
+from skimage.morphology import disk 
 import os
 
 
@@ -33,8 +37,20 @@ binary = closing(binary)
 binimg = io.imshow(binary)
 plt.show()
 
+
+footprint = disk(6)
+eroded = erosion(binary, footprint)
+
+io.imshow(eroded)
+plt.show()
+
+
+dilated = dilation(eroded, footprint)
+io.imshow(dilated)
+plt.show()
+
 # Label para seleccionar las regiones y separarlas por colores
-label_img = label(binary)
+label_img = label(dilated)
 io.imshow(label_img)
 plt.show()
 
@@ -63,7 +79,7 @@ table['std_intensity'] = std
 table['25th Percentile'] = mean
 table['75th Percentile'] = std
 table['iqr'] = table['75th Percentile'] - table['25th Percentile']
-table['label'] = image_path[0]
+table['label'] = image_path[0] + image_path[1]
 print("Tabla de los datos de la imagen:")
 print(table)
 imagetest = table.drop(['label'], axis = 1)
@@ -74,17 +90,25 @@ imagetestlbl = table['label']
 # Por algun motivo que no entendemos presenta un index error, a pesar de que con anterioridad no pasaba
 print("Todas las imagenes \n")
 print("No cierre la ejecucion, se esta trabajando")
-image_path_list = os.listdir('./piezas/')
+image_path_list = os.listdir('./dataset/')
 df = pd.DataFrame()
 
 for i in range(len(image_path_list)):
     image_path = image_path_list[i]
     print("Analizando imagen: " + image_path)
-    image = rgb2gray(io.imread('./piezas/'+image_path))
+    image = rgb2gray(io.imread('./dataset/'+image_path))
     ##image = resize(image,(640,480), anti_aliasing = True)
     binary = image < threshold_otsu(image)
     binary = closing(binary)
-    label_img = label(binary)
+    footprint = disk(6)
+    eroded = erosion(binary, footprint)
+    dilated = dilation(eroded, footprint)
+    label_img = label(dilated)
+
+
+
+
+
 
     table = pd.DataFrame(regionprops_table(label_img, image,
                                            ['convex_area', 'area',
@@ -113,7 +137,7 @@ for i in range(len(image_path_list)):
     table['25th Percentile'] = mean
     table['75th Percentile'] = std
     table['iqr'] = table['75th Percentile'] - table['25th Percentile']
-    table['label'] = image_path[0]
+    table['label'] = image_path[0] + image_path[1]
     df = pd.concat([df, table], axis=0)
 
 df.head()
