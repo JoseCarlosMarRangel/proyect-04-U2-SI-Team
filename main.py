@@ -15,19 +15,19 @@ from tqdm import tqdm
 from skimage.morphology import (erosion, dilation, opening, closing,  # noqa
                                 white_tophat)
 from skimage.morphology import black_tophat, skeletonize, convex_hull_image  # noqa
-from skimage.morphology import disk 
+from skimage.morphology import disk
 import os
 
 
 # Prueba con una sola imagen
-image_path_list = os.listdir('./piezas/')
+image_path_list = os.listdir('./dataset/')
 i = 24
-image_path = 'tBlackTowerFour.jpg'
+image_path = 'aB.jpg'
 # image = rgb2gray(io.imread('./dataset/'+image_path))
 
 # Aplica un filtro en la imagen para que este en blanco y negro
 # image_path = 'rey.jpg';
-image = rgb2gray(io.imread('./piezas/tBlackTowerFour.jpg'))
+image = rgb2gray(io.imread('./dataset/aB.jpg'))
 ##image = resize(image,(480,640), anti_aliasing = True)
 imageplt = io.imshow(image)
 plt.show()
@@ -83,7 +83,7 @@ table['iqr'] = table['75th Percentile'] - table['25th Percentile']
 table['label'] = image_path[0] + image_path[1]
 print("Tabla de los datos de la imagen:")
 print(table)
-imagetest = table.drop(['label'], axis = 1)
+imagetest = table.drop(['label'], axis=1)
 imagetestlbl = table['label']
 # exit()
 
@@ -105,11 +105,6 @@ for i in range(len(image_path_list)):
     eroded = erosion(binary, footprint)
     dilated = dilation(eroded, footprint)
     label_img = label(dilated)
-
-
-
-
-
 
     table = pd.DataFrame(regionprops_table(label_img, image,
                                            ['convex_area', 'area',
@@ -150,9 +145,9 @@ y = df["label"]
 columns = X.columns
 
 # train-test-split
-##X_train, X_test, y_train, y_test = train_test_split(
-    ##X, y, test_size=0.25, random_state=123, stratify=y)
-X_train, X_test, y_train, y_test = X,X,y,y
+# X_train, X_test, y_train, y_test = train_test_split(
+# X, y, test_size=0.25, random_state=123, stratify=y)
+X_train, X_test, y_train, y_test = X, X, y, y
 clf = GradientBoostingClassifier(
     n_estimators=50, max_depth=3, random_state=123)
 
